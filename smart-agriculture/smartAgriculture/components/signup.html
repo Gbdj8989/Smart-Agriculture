@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+        var fd=new FormData()
+        fd.append('fname','John')
+        fd.append('lname','Doe')
+        fd.append('username','user-1')
+        fd.append('password','password')
+        fd.append('email','email@domain.com')
+        fd.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+        const func1=async () => {
+            await fetch('/api/createNewUser',{
+                method:'POST',
+                body: fd
+            }).then(response=>{return response.json()})
+            .then(data=>console.log(data))
+        }
+        window.onload=func1()
+    </script>
+</body>
+</html>

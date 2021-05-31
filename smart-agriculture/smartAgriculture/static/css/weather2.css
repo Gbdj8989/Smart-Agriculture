@@ -1,0 +1,140 @@
+.we-container
+{
+    padding-left: 40px;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap:nowrap;
+    width: 100%;
+}
+.cur-container
+{
+    width: 85%;
+}
+.we-loc
+{
+    color: white;
+    font-size: 30px;
+}
+.we-loc-det
+{
+    color:white;
+    padding-top: 10px;
+}
+
+.we-desc
+{
+    color: white;
+    display: flex;
+    align-items: center;
+    padding-top: 10px;
+}
+.we-dec-info
+{
+    display: flex;
+    flex-direction: row;
+
+}
+.we-params
+{
+    color: white;
+    width: 60%;
+}
+.we-param
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 20px;
+    font-size: 18px;
+
+}
+.param-title
+{
+    color:darksalmon;
+}
+.main-temp
+{
+    font-size: 30px;
+}
+.wea-container
+{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-left: 60px;
+    padding-top: 20px;
+    padding-right:30px;
+}
+.wea-header
+{
+    font-size: 24px;
+    color: white
+}
+.wea-params
+{
+    padding-top: 20px;
+}
+.wea-param
+{
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+.wea-content
+{
+    display: flex;
+    align-items: center;
+}
+.wea-param:hover
+{
+    background-color: rgba(36, 35, 36,0.7);
+    cursor: pointer;
+    
+}
+.wea-content > div 
+{
+    padding-right:30px;
+}
+.wea-date
+{
+    padding-left: 10px;
+    width:14%
+    
+}
+.temp-hilo
+{
+    font-size: 18px;
+    width: 30%;
+}
+.temp-status
+{
+    font-size: 15px;
+}
+.wea-details
+{
+    padding: 10px;
+    display: none;
+    transition: ease-out 0.2s;
+    flex-direction: row;
+}
+
+.wea-details-left, .wea-details-right
+{
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    width: 50%;
+}
+.det-left, .det-right
+{
+    display: flex;
+    justify-content: space-between;   
+}
+.det-left > div, .det-right > div {
+    padding: 10px 20px 0px 0px;
+}
+.det-left > :first-child , .det-right > :first-child
+{
+    color:darksalmon;
+}

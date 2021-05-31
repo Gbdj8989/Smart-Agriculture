@@ -1,0 +1,30 @@
+.water-container
+{
+    width: 100%;
+    padding-left: 50px;
+    padding-top: 30px;
+    display: flex;
+    flex-direction: column;
+}
+.water-header
+{
+    font-size: 30px;
+    padding-bottom: 20px;
+}
+.water-charts
+{
+    display: flex;
+    flex-direction: column; 
+
+}
+.chart
+{
+    padding-top: 20px;
+    height: 20%;
+    width: 80%;
+    padding-bottom: 40px;
+}
+.header
+{
+    font-size: 20px;
+}

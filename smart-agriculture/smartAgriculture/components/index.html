@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Agriculture</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body>
+    <div class="body-container">
+        <div class="navbar-container">
+            <div class="left">
+                <div class="logo-img">
+                    <i class="fa fa-envira"></i>
+                </div>
+                <div class="logo-name">
+                    Smart Agriculture
+                </div>
+            </div>
+            <div class="right">
+                <div class="user-name">
+                    farmer-1
+                </div>
+                <div class="user-location">
+                    location-1
+                </div>
+            </div>
+        </div>
+        <div class="content-container">
+            <div class="sidebar">
+                <div class="sidebar-container">
+                    <ul class="sidebar-options" id="menu">
+        
+                    </ul>
+                </div>
+            </div>
+            <div class="page-container">
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </div>
+        <div class="footnote">
+            <div class="footnote-content">
+                Made by IoT Team in IoTLab, 2021
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/index1.js"></script>
+</body>
+
+</html>

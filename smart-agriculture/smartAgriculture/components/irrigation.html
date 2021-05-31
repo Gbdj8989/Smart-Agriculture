@@ -1,0 +1,135 @@
+{% extends "index.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="/static/css/irrigation.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<div class="water-container">
+    <div class="water-header">
+        Irrigation Data
+    </div>
+    <div class="water-charts">
+        <div class="chart one"><div class="header">Soil Moisture</div><canvas id="soilMoisture"></canvas></div>
+        <div class="chart two"><div class="header">Temperature</div><canvas id="temperature"></canvas></div>
+        <div class="chart three"><div class="header">Humidity</div><canvas id="humidity"></canvas></div>
+    </div>
+</div>
+<script>
+    const buildChart=(labels,label,data,color)=>
+    {
+        console.log(data)
+        var ctx = document.getElementById(label).getContext('2d');
+        var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: label,
+                data: data,
+                borderColor: color
+                }
+            ]
+            },
+            options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: label
+				},
+                legend:{
+                    labels : {
+                            fontColor: "rgba(255,255,255,1)",
+                            fontSize : 16
+                        }
+                },
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Timestamp'
+						},
+                        gridLines: {
+                            color: "rgba(255,255,255, .2)",
+                        },
+                        ticks : {
+                            fontColor : "rgba(255,255,255,1)",
+                        }
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Value'
+						},
+                        gridLines: {
+                            color: "rgba(255,255,255, .2)",
+                        },
+                        ticks : {
+                            fontColor : "rgba(255,255,255,1)",
+                        }
+					}]
+				}
+			}
+        });
+    }
+    const TimeConv=(unix_time)=>
+    {
+        var whole_date=new Date(unix_time*1000);
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var day=whole_date.getDate();
+        var month=whole_date.getMonth();
+        var year=whole_date.getFullYear();
+        var day_month=day+" "+months[month];
+        var date=day+"/"+(parseInt(month)+1).toString()+"/"+year
+        var time=whole_date.toLocaleTimeString()
+        var time_date= time+ " " + day_month
+        console.log(time);
+        return {
+            "day_month": day_month,
+            "date_ddmmyyy":date,
+            "time":time,
+            "time_date" : time_date
+        }
+    }
+    const getData= async (sensor)=>
+    {
+        var whole_data=[]
+        var timestamp=[]
+        var data=[]
+        var fd=new FormData()
+        fd.append('sensor',sensor)
+        fd.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+        await fetch('/api/getIrrigationData',{
+            method:'POST',
+            body : fd,
+        }).then(response => {return response.json()})
+            .then(data => whole_data=data.data)
+        whole_data.map((item, index)=>
+        {
+            data.push(item.data)
+            timestamp.push(TimeConv(item.timestamp).time_date)
+        })
+        console.log(data)
+        console.log(timestamp)
+        var r=Math.floor(Math.random()*255).toString()
+        var g=Math.floor(Math.random()*255).toString()
+        var b=Math.floor(Math.random()*255).toString()
+        var color="rgb("+r+","+g+","+b+")"
+        buildChart(timestamp,sensor,data,color)
+    }
+    window.onload=()=>
+    {
+        document.querySelector(".chart.one").onload=getData('soilMoisture')
+        document.querySelector(".chart.two").onload=getData('temperature')
+        document.querySelector(".chart.three").onload=getData('humidity')
+    }
+</script>
+{% endblock content %}

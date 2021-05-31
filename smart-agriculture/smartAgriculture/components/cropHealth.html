@@ -1,0 +1,148 @@
+{% extends "index.html" %}
+{% block content %}
+<link rel="stylesheet" href="/static/css/cropHealth.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<div class="data-container">
+    <div class="div-header">
+        NDVI data history
+    </div>
+    <div class="chart"><canvas id="myChart"></canvas></div>
+    <div class="date-report">
+
+    </div>
+    
+</div>
+<script>
+
+    var date_time=new Date()
+    var today_date=Math.round(date_time.getTime()/1000)
+    console.log(today_date)
+    var date = new Date(2021,00,21)
+    var old_date=Math.round(date.getTime()/1000)
+    console.log(old_date)
+
+    const TimeConv=(unix_time)=>
+    {
+        var whole_date=new Date(unix_time*1000);
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var day=whole_date.getDate();
+        var month=whole_date.getMonth();
+        var year=whole_date.getFullYear();
+        var day_month=day+" "+months[month];
+        var date=day+"/"+(parseInt(month)+1).toString()+"/"+year
+        var time=whole_date.toLocaleTimeString()
+        return {
+            "day_month": day_month,
+            "date_ddmmyyy":date,
+            "time":time
+        }
+    }
+    const getStatus=(ndvi)=>
+    {
+        if(ndvi>=-1 && ndvi<= 0)
+            return "Dead Plants or Inanimate objects"
+        else if (ndvi>0 && ndvi<=0.33 )
+            return "Unhealthy Plants"
+        else if (ndvi>0.33 && ndvi<=0.66 )
+            return "Moderately Healthy Plant"
+        else if (ndvi>0.66 && ndvi<=1 )
+            return "Very Healthy Plant"
+        else
+            return "Not to the index"
+    }
+    const buildChart=(labels,data1, data2, data3)=>
+    {
+        console.log(data1)
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Mean NDVI Data',
+                data: data1,
+                borderColor: 'rgb(255, 99, 132)'
+                },
+                {
+                label: 'Max NDVI Data',
+                data: data2,
+                borderColor: 'rgb(255, 255, 0)'
+                },
+                {
+                label: 'Min NDVI Data',
+                data: data3,
+                borderColor: 'rgb(255, 51, 255)'
+                }
+            ]
+            },
+            options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                    }
+                    }]
+                }
+            }   
+        });
+    }
+    const statechange = (index,state) =>
+    {
+        if (state==0)
+        {
+            document.getElementsByClassName('report-item')[index].querySelector(".report-details").style.display="flex"
+        }
+        if(state==1)
+        {
+            document.getElementsByClassName('report-item')[index].querySelector(".report-details").style.display="none"
+
+        }
+    }
+    const getData = async () => 
+    {
+        var whole_data=[]
+        var date_array=[]
+        var mean_ndvi=[]
+        var max_ndvi=[]
+        var min_ndvi=[]
+        var fd=new FormData()
+        fd.append("startDate",old_date)
+        fd.append("endDate",today_date)
+        fd.append("polid","dummy")
+        fd.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+
+        await fetch('/api/getNdvi',{
+            method:'POST',
+            body: fd
+        }).then(response => {return response.json()})
+        .then(data => {whole_data=data})
+        console.log(whole_data)
+        whole_data.map((item,index)=>
+        {
+            var ndvi_data= item.data
+            console.log(TimeConv(item.dt).day_month,ndvi_data.mean)
+            date_array.push(TimeConv(item.dt).day_month)
+            mean_ndvi.push(ndvi_data.mean.toFixed(4))
+            max_ndvi.push(ndvi_data.max.toFixed(4))
+            min_ndvi.push(ndvi_data.min.toFixed(4))
+
+            document.querySelector('.date-report')
+            .innerHTML+=`<div key=${index} class="report-item" onmouseover=statechange(${index},0) onmouseout=statechange(${index},1)>
+                            <div class='report-status'>        
+                                <div class="report-date">${TimeConv(item.dt).day_month}</div>
+                                <div class="report-message">${getStatus(ndvi_data.mean)}</div>
+                            </div>
+                            <div class="report-details">
+                                <div class="det-item">
+                                    <div class="det-row"><div>Max </div><div>${ndvi_data.max.toFixed(2)}</div></div>
+                                    <div class="det-row"><div>Min </div><div>${ndvi_data.min.toFixed(2)}</div></div>
+                                    <div class="det-row"><div>Median </div><div>${ndvi_data.median.toFixed(2)}</div></div>
+                                    <div class="det-row"><div>Mean </div><div>${ndvi_data.mean.toFixed(2)}</div></div>
+                                </div>
+                            </div>
+                </div>`
+        })
+        buildChart(date_array.reverse(),mean_ndvi.reverse(),max_ndvi.reverse(),min_ndvi.reverse())
+    }
+    window.onload=getData()
+</script>
+{% endblock content %}

@@ -1,0 +1,75 @@
+.data-container
+{
+    width: 100%;
+    padding-left: 50px;
+    padding-top: 30px;
+    display: flex;
+    flex-direction: column;
+}
+.div-header
+{
+    font-size: 30px;
+}
+.chart
+{
+    padding-top: 20px;
+    height: 30%;
+    width: 80%;
+}
+.date-report
+{
+    padding-top: 30px;
+}
+.report-details
+{
+    display: none;
+}
+.report-item
+{
+    display: flex;
+    flex-direction: column;
+    width:40%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    
+}
+.report-item:hover
+{
+    background-color: rgba(36, 35, 36,0.7);
+    cursor: pointer;
+}
+.report-date {
+    color: lightgreen;
+}
+.report-status
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+}
+.report-message
+{
+    width: 50%;
+}
+.det-item
+{
+    width: 100%;
+    padding: 10px 10px 20px 20px;
+    display: flex;
+    flex-direction: column;
+}
+.det-row
+{
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+}
+.det-row> :first-child 
+{
+    color:darksalmon;
+
+}
+.det-row > div {
+    width: 50%;
+}

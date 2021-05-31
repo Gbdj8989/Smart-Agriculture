@@ -1,0 +1,213 @@
+{% extends "index.html" %}
+{% block content %}
+
+
+<link rel="stylesheet" href="/static/css/weather2.css">
+<div class="we-container">
+    <div class="cur-container">
+        <div class="we-loc">
+        </div>
+        <div class="we-loc-det">
+            
+        </div>
+        <div class="we-desc">
+            <span class="we-img"></span>
+            <div class="we-desc-info">
+                <div class="main-temp"></div>
+                <div class="main-status"></div>
+            </div>
+        </div>
+        <div class="we-params">
+        </div>
+    </div>
+    <div class="wea-container">
+        <div class="wea-header">
+            8-day Forecast
+        </div>
+        <div class="wea-params">
+            
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script>
+    
+    const TimeConv=(unix_time)=>
+    {
+        var whole_date=new Date(unix_time*1000);
+        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        var day=whole_date.getDate();
+        var month=whole_date.getMonth();
+        var year=whole_date.getFullYear();
+        var day_month=day+" "+months[month];
+        var date=day+"/"+(parseInt(month)+1).toString()+"/"+year
+        var time=whole_date.toLocaleTimeString()
+        console.log(time);
+        return {
+            "day_month": day_month,
+            "date_ddmmyyy":date,
+            "time":time
+        }
+    }
+
+    var fd= new FormData()
+    fd.append('lat',22.77)
+    fd.append('lon',88.32)
+    fd.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+    const getWeather= async () =>
+    {
+        var whole_data={}
+        
+
+        await fetch('/api/getCurWeather',{
+        method:"POST",
+        body:fd
+        }).then(response=>response.json())
+            .then(data => {console.log(data)
+                            whole_data=data})
+        console.log(whole_data)
+        coordinates=whole_data.coord
+        curweather=whole_data.main
+        var status=whole_data.weather[0]
+        wind=whole_data.wind
+
+        const we_data = [
+        {
+            title: "Max Temp",
+            content: `${curweather.temp_max} ˚C`
+        },
+        {
+            title: "Min Temp",
+            content: `${curweather.temp_min} ˚C`
+        },
+        {
+            title: "Feels Like ",
+            content: `${curweather.feels_like} ˚C`
+        },
+        {
+            title: "Humidity",
+            content: `${curweather.humidity}%`
+        },
+        {
+            title: "Pressure",
+            content: `${curweather.pressure} hPa`
+        },
+        {
+            title: "Wind Speed",
+            content: `${wind.speed}`
+        },
+        {
+            title: "Wind Flow Degree",
+            content: `${wind.deg}`
+        }
+    ]
+
+        document.querySelector(".we-loc").innerHTML=`${whole_data.name}`
+        document.querySelector(".we-loc-det").innerHTML=`Coordinates : ${coordinates.lat}, ${coordinates.lon}`
+        document.querySelector(".main-temp").innerHTML=`${curweather.temp} ˚C`
+        document.querySelector(".main-status").innerHTML=`${status.main}`
+        document.querySelector(".we-img").innerHTML=`<img src="http://openweathermap.org/img/wn/${status.icon}@2x.png"/>`
+        we_data.map((item, index)=>{
+            document.querySelector(".we-params").innerHTML+= `<li key=${index} class="we-param">
+                                                                <span class="param-title">${item.title}</span>
+                                                                <span class="param-content">${item.content}</span>
+                                                             </li>`
+        })
+    }
+
+    const statechange = (index,state) =>
+    {
+        if (state==0)
+        {
+            document.getElementsByClassName('wea-param')[index].querySelector(".wea-details").style.display="flex"
+        }
+        if(state==1)
+        {
+            document.getElementsByClassName('wea-param')[index].querySelector(".wea-details").style.display="none"
+
+        }
+    }
+    const getAllWeather = async () =>
+    {
+        var whole_data=[]
+        await fetch('/api/getAllWeather',{
+        method:"POST",
+        body:fd
+        }).then(response=>response.json())
+            .then(data => {console.log(data)
+                            whole_data=data.daily})
+        console.log(whole_data)
+        whole_data.map((item,index)=>
+        {
+            var temp=item.temp
+            var feels_like=item.feels_like
+            var dstatus=item.weather[0]
+            var h=TimeConv(item.dt)
+            document.querySelector(".wea-params")
+            .innerHTML+= `<div class="wea-param" key=${index} onmouseover="statechange(${index},0)" onmouseout="statechange(${index},1)">
+                        <div class='wea-content'>
+                            <div class="wea-date">
+                                ${h.day_month}
+                            </div>
+                            <div class="status-img"> 
+                                <img src="http://openweathermap.org/img/wn/${dstatus.icon}.png"/>
+                            </div>
+                            <div class="temp-hilo">
+                                ${temp.max} / ${temp.min} ˚C
+                            </div>
+                            <div class="temp-status">
+                                ${dstatus.main}
+                            </div>
+                        </div>
+                        <div class="wea-details">
+                            <div class="wea-details-left">
+                                <div class="det-left">
+                                    <div>Sunrise</div>
+                                    <div>${TimeConv(item.sunrise).time}</div>
+                                </div>
+                                <div class="det-left">
+                                    <div>Sunset</div>
+                                    <div>${TimeConv(item.sunset).time}</div>
+                                </div>
+                                <div class="det-left">
+                                    <div>Humidity</div>
+                                    <div>${item.humidity}%</div>
+                                 </div>
+                            </div>
+                            <div class="wea-details-right">
+       
+                                <div class="det-right">
+                                    <div>Pressure</div>
+                                    <div>${item.pressure}</div>
+                                </div>
+                                <div class="det-right">
+                                    <div>Rainfall Chances</div>
+                                    <div>${item.pop}</div>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>`
+
+        })
+        
+
+    }
+
+    window.onload=getWeather()
+    window.onload=getAllWeather()
+        
+    
+
+
+    
+    
+</script>
+
+{% endblock content %}

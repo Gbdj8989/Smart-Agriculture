@@ -1,0 +1,32 @@
+.overview-container
+{
+    padding-left: 40px;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap:nowrap;
+    width: 100%;
+}
+
+.overview-head
+{
+    font-size: 30px;
+    padding-bottom: 30px;
+}
+.overview-items
+{
+    display: flex;
+    flex-direction: column;
+}
+.overview-item
+{
+    display: flex;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    font-size: 20px;
+}
+.det-left
+{
+    width:30%;
+    color : darksalmon;
+}

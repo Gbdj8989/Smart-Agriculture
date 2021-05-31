@@ -1,0 +1,61 @@
+{% extends "index.html" %}
+{% block content %}
+<link rel="stylesheet" href="/static/css/overview.css">
+<div class="overview-container">
+    <div class="overview-head">
+        Overview
+    </div>
+    <div class="overview-items">
+
+    </div>
+</div>
+
+<script>
+    const data= [
+    {
+        title : 'Field Name',
+        content : 'Demo Field -1'
+    },
+    {
+        title : 'Location',
+        content: 'Far east of Demo Land'
+    },
+    {
+        title : "Lattitude",
+        content: "22.773381"
+    },
+    {
+        title : "Longitude",    
+        content: "88.324472"
+    },
+    {
+        title : 'Area',
+        content : '1.20 Ha'
+    },
+    {
+        title : 'Weather Station',
+        content : 'Demo Big Location'
+    },
+    {
+        title : 'Current Crop',
+        content : 'Demo Crop'
+    },
+    {
+        title : 'Growth stage',
+        content : 'Demo stage'
+    }
+]
+
+data.map((item,index)=>{
+    document.querySelector(".overview-items")
+    .innerHTML+=`<div class="overview-item">
+                    <div class="det-left">${item.title}</div>
+                    <div class="det-right">${item.content}</div>
+        </div>`
+})
+
+</script>
+
+
+
+{% endblock content %}
