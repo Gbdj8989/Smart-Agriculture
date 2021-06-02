@@ -62,7 +62,10 @@ A field was chosen in random with the GPS coordinates, the polygon/ field border
 Photos of some leaves were clicked and uploaded into the portal.
 The dataset formed had a quite good accuracy of 92%.
 #### Portal
-
+![alt text](https://github.com/subhidh/Smart-Agriculture/blob/main/portal%20screenshot/Picture2.jpg)
+![alt text](https://github.com/subhidh/Smart-Agriculture/blob/main/portal%20screenshot/Picture1.jpg)
+![alt text](https://github.com/subhidh/Smart-Agriculture/blob/main/portal%20screenshot/Picture3.jpg)
+![alt text](https://github.com/subhidh/Smart-Agriculture/blob/main/portal%20screenshot/Picture4.jpg)
 ### <div align="center">VI.  CONCLUSION
 For future scope, there are wide aspects that needs to be covered like creating an automated scientific crop specific irrigation system, creating a reliable and efficient Wireless Sensor Network
 ### <div align="center">VII.  REFERENCES
